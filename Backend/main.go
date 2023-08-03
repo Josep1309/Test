@@ -2,9 +2,14 @@ package main
 
 import (
 	f "Server/functions"
+	
+    //"flag"
+	//"log"
+	//"os"
+	//"runtime"
+	//"runtime/pprof"
 
 	"encoding/json"
-	//"fmt"
 	"net/http"
 	"strconv"
 
@@ -48,19 +53,39 @@ type SourceData struct {
         XCc                    string `json:"X-cc"`
 }
 
+//var cpuprofile = flag.String("cpuprofile", "", "write cpu profile to `file`")
+//var memprofile = flag.String("memprofile", "", "write memory profile to `file`")
+
 func main() {
-    
+
+    /*
+    flag.Parse()
+    if *cpuprofile != "" {
+        f, err := os.Create(*cpuprofile)
+        if err != nil {
+            log.Fatal("could not create CPU profile: ", err)
+        }
+        defer f.Close() // error handling omitted for example
+        if err := pprof.StartCPUProfile(f); err != nil {
+            log.Fatal("could not start CPU profile: ", err)
+        }
+        defer pprof.StopCPUProfile()
+    }
+
+    var rootPath string = "/home/jose/Documents/Projects/Test/Database/"
+    f.EmailsAdd(rootPath)
+    f.PostZinc()
+    */
+
     r := chi.NewRouter()
 
     r.Use(middleware.Logger)
 
     r.Use(cors.Handler(cors.Options{
-        //AllowedOrigins:   []string{"https://foo.com"}, // Use this to allow specific origin hosts
         AllowedOrigins:   []string{"https://*", "http://*"},
         // AllowOriginFunc:  func(r *http.Request, origin string) bool { return true },
         AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
         AllowedHeaders:   []string{"Accept", "Authorization", "Content-Type", "X-CSRF-Token"},
-        //ExposedHeaders:   []string{"Link"},
         AllowCredentials: false,
         MaxAge:           300, // Maximum value not ignored by any of major browsers
       }))
@@ -99,8 +124,6 @@ func main() {
         response := f.Search(string(jsonquery))
 
         _ = json.Unmarshal(response, &databaseResponse)
-
-        //fmt.Println(databaseResponse["hits"]["hits"])
         
         response, err := json.Marshal(databaseResponse["hits"]["hits"])
         if err != nil {
@@ -111,4 +134,18 @@ func main() {
     })
 
     http.ListenAndServe(":3000", r)
+
+    /*
+    if *memprofile != "" {
+        f, err := os.Create(*memprofile)
+        if err != nil {
+            log.Fatal("could not create memory profile: ", err)
+        }
+        defer f.Close() // error handling omitted for example
+        runtime.GC() // get up-to-date statistics
+        if err := pprof.WriteHeapProfile(f); err != nil {
+            log.Fatal("could not write memory profile: ", err)
+        }
+    }
+    */
 }
