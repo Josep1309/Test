@@ -39,14 +39,14 @@
     <!--Emails view section-->
     <div class="max-h-[600px] m-8 flex">
       <!--Emails list on the left-->
-      <div v-if="responseDataList" class="w-full basis-1/3 bg-gray-700 m-4 rounded-2xl overflow-auto">
+      <div v-if="responseDataList.length > 0" class="w-full basis-1/3 bg-gray-700 m-4 rounded-2xl overflow-auto">
         <div v-for="(response, index) in responseDataList" :key="index" class="border-b-2 p-6" @click="showEmailContent(response)">
           <p class="text-white"><strong>From:</strong> {{ response._source.From }}</p>
           <p class="text-white"><strong>Subject:</strong> {{ response._source.Subject }}</p>
           <p class="text-white"><strong>Date:</strong> {{ response._source.Date }}</p>
         </div>
       </div>
-      <div v-else class="text-white">No response data available.</div>
+      <div v-else class="text-white">No emails match found.</div>
       <!--Individual email visualization-->
       <div v-if="selectedEmail" class="w-full basis-2/3 bg-gray-700 m-4 p-10 rounded-2xl overflow-auto">
         <p class="text-white"><strong>From:</strong> {{ selectedEmail._source.From }}</p>
@@ -88,21 +88,21 @@ export default{
 
       if (response.ok) {
         const data = await response.json();
-        // Process the response data from the server if needed
-        console.log(data);
+        //console.log(data);
         if (Array.isArray(data) && data.length > 0) {
-          this.responseDataList = data; // Assign the entire response array to responseDataList
+          this.responseDataList = data;
+          this.selectedEmail = null;
         } else {
+          this.responseDataList = [];
+          this.selectedEmail = null;
           throw new Error("Invalid response data format.");
         }
-        console.log(typeof data);
       } else {
-        // Handle the server's error response if necessary
-        this.responseData = "data";
+        this.responseDataList = [];
+        this.selectedEmail = null;
         console.error('Error:', response.status);
       }
     } catch (error) {
-      // Handle any network errors or exceptions that may occur
       console.error('Network Error:', error);
       }
     },
