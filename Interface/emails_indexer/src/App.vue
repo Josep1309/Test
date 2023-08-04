@@ -46,7 +46,11 @@
           <p class="text-white"><strong>Date:</strong> {{ response._source.Date }}</p>
         </div>
       </div>
-      <div v-else class="text-white">No emails match found.</div>
+      <div v-else class="w-full basis-1/3 bg-gray-700 m-4 rounded-2xl overflow-auto">
+        <div class="p-4">
+          <p class="text-white">No emails match found.</p>
+        </div>
+      </div>
       <!--Individual email visualization-->
       <div v-if="selectedEmail" class="w-full basis-2/3 bg-gray-700 m-4 p-10 rounded-2xl overflow-auto">
         <p class="text-white"><strong>From:</strong> {{ selectedEmail._source.From }}</p>
