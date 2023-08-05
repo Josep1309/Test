@@ -2,6 +2,12 @@ package main
 
 import (
 	f "Server/functions"
+	
+    "flag"
+	"log"
+	"os"
+	"runtime"
+	"runtime/pprof"
 
 	"encoding/json"
 	"net/http"
@@ -28,26 +34,23 @@ type Query struct {
 	EndTime    string `json:"end_time"`
 }
 
-type SourceData struct {
-        Content                string `json:"Content"`
-        ContentTransferEncoding string `json:"Content-Transfer-Encoding"`
-        ContentType            string `json:"Content-Type"`
-        Date                   string `json:"Date"`
-        From                   string `json:"From"`
-        MessageID              string `json:"Message-ID"`
-        MimeVersion            string `json:"Mime-Version"`
-        Subject                string `json:"Subject"`
-        To                     string `json:"To"`
-        XFileName              string `json:"X-FileName"`
-        XFolder                string `json:"X-Folder"`
-        XFrom                  string `json:"X-From"`
-        XOrigin                string `json:"X-Origin"`
-        XTo                    string `json:"X-To"`
-        XBcc                   string `json:"X-bcc"`
-        XCc                    string `json:"X-cc"`
-}
+var cpuprofile = flag.String("cpuprofile", "", "write cpu profile to `file`")
+var memprofile = flag.String("memprofile", "", "write memory profile to `file`")
 
 func main() {
+
+    flag.Parse()
+    if *cpuprofile != "" {
+        f, err := os.Create(*cpuprofile)
+        if err != nil {
+            log.Fatal("could not create CPU profile: ", err)
+        }
+        defer f.Close() // error handling omitted for example
+        if err := pprof.StartCPUProfile(f); err != nil {
+            log.Fatal("could not start CPU profile: ", err)
+        }
+        defer pprof.StopCPUProfile()
+    }
 
     r := chi.NewRouter()
 
@@ -104,4 +107,16 @@ func main() {
     })
 
     http.ListenAndServe(":3000", r)
+
+    if *memprofile != "" {
+        f, err := os.Create(*memprofile)
+        if err != nil {
+            log.Fatal("could not create memory profile: ", err)
+        }
+        defer f.Close() // error handling omitted for example
+        runtime.GC() // get up-to-date statistics
+        if err := pprof.WriteHeapProfile(f); err != nil {
+            log.Fatal("could not write memory profile: ", err)
+        }
+    }
 }
