@@ -3,11 +3,11 @@ package main
 import (
 	f "Server/functions"
 	
-    //"flag"
-	//"log"
-	//"os"
-	//"runtime"
-	//"runtime/pprof"
+    "flag"
+	"log"
+	"os"
+	"runtime"
+	"runtime/pprof"
 
 	"encoding/json"
 	"net/http"
@@ -53,12 +53,11 @@ type SourceData struct {
         XCc                    string `json:"X-cc"`
 }
 
-//var cpuprofile = flag.String("cpuprofile", "", "write cpu profile to `file`")
-//var memprofile = flag.String("memprofile", "", "write memory profile to `file`")
+var cpuprofile = flag.String("cpuprofile", "", "write cpu profile to `file`")
+var memprofile = flag.String("memprofile", "", "write memory profile to `file`")
 
 func main() {
 
-    /*
     flag.Parse()
     if *cpuprofile != "" {
         f, err := os.Create(*cpuprofile)
@@ -72,11 +71,6 @@ func main() {
         defer pprof.StopCPUProfile()
     }
 
-    var rootPath string = "/home/jose/Documents/Projects/Test/Database/"
-    f.EmailsAdd(rootPath)
-    f.PostZinc()
-    */
-
     r := chi.NewRouter()
 
     r.Use(middleware.Logger)
@@ -89,8 +83,6 @@ func main() {
         AllowCredentials: false,
         MaxAge:           300, // Maximum value not ignored by any of major browsers
       }))
-
-    r.Mount("/debug", middleware.Profiler())
 
     r.Get("/", func(w http.ResponseWriter, r *http.Request) {
         w.Write([]byte("Hi! You are connected to the server."))
@@ -135,7 +127,6 @@ func main() {
 
     http.ListenAndServe(":3000", r)
 
-    /*
     if *memprofile != "" {
         f, err := os.Create(*memprofile)
         if err != nil {
@@ -147,5 +138,4 @@ func main() {
             log.Fatal("could not write memory profile: ", err)
         }
     }
-    */
 }
