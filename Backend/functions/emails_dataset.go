@@ -4,7 +4,7 @@ import (
 	"bufio"
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
+	//"io/ioutil"
 	"log"
 	"os"
 	"strings"
@@ -50,7 +50,7 @@ func EmailsAdd(path string) {
 
     encoder := json.NewEncoder(data)
 
-    files, err := ioutil.ReadDir(path)
+    files, err := os.ReadDir(path)
     if err != nil {
         log.Fatal(err)
     }

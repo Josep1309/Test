@@ -27,7 +27,20 @@
             <option value="fuzzy">Fuzzy</option>
             <option value="daterange">Date Range</option>
           </select>
-          <button @click="handleSearch" type="submit" class="flex-none rounded-md bg-[#4682A9] px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500">Search</button>
+          <button @click="handleSearch" type="submit" class="flex-none rounded-md bg-[#4682A9] px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-[#3a6c93] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500">Search</button>
+          
+          <!--Index Options-->
+          <div class="relative ml-8">
+            <button type="button" class="flex items-center justify-center w-10 h-10 rounded-full bg-[#4682A9] hover:bg-[#3a6c93] focus:outline-none focus:ring focus:ring-indigo-200" @click="toggleDropdown">
+              <svg class="w-6 h-6 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+              </svg>
+            </button>
+            <div v-if="showDropdown" class="absolute z-10 right-0 mt-2 w-40 bg-white rounded-lg shadow-lg ring-1 ring-white/10 focus:ring-2">
+              <button type="button" class="block bg-gray-900 px-4 py-2 text-sm text-white hover:bg-gray-700 w-full text-left" @click="createItem">Create new index</button>
+              <button type="button" class="block bg-gray-900 px-4 py-2 text-sm text-white hover:bg-gray-700 w-full text-left" @click="deleteItem">Delete index</button>
+            </div>
+          </div>
         </div>
     </div>
 
@@ -72,6 +85,7 @@ export default{
       responseDataList: [],
       selectedNumber: 1,
       selectedEmail: null,
+      showDropdown: false,
     };
   },
   methods: {
@@ -112,6 +126,17 @@ export default{
     },
     showEmailContent(response) {
       this.selectedEmail = response;
+    },
+    toggleDropdown() {
+      this.showDropdown = !this.showDropdown;
+    },
+    async createItem() {
+      // Code to handle the "Create" button click
+      // Add your logic here
+    },
+    async deleteItem() {
+      // Code to handle the "Delete" button click
+      // Add your logic here
     },
   },
 };
