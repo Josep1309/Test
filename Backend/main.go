@@ -34,25 +34,6 @@ type Query struct {
 	EndTime    string `json:"end_time"`
 }
 
-type SourceData struct {
-        Content                string `json:"Content"`
-        ContentTransferEncoding string `json:"Content-Transfer-Encoding"`
-        ContentType            string `json:"Content-Type"`
-        Date                   string `json:"Date"`
-        From                   string `json:"From"`
-        MessageID              string `json:"Message-ID"`
-        MimeVersion            string `json:"Mime-Version"`
-        Subject                string `json:"Subject"`
-        To                     string `json:"To"`
-        XFileName              string `json:"X-FileName"`
-        XFolder                string `json:"X-Folder"`
-        XFrom                  string `json:"X-From"`
-        XOrigin                string `json:"X-Origin"`
-        XTo                    string `json:"X-To"`
-        XBcc                   string `json:"X-bcc"`
-        XCc                    string `json:"X-cc"`
-}
-
 var cpuprofile = flag.String("cpuprofile", "", "write cpu profile to `file`")
 var memprofile = flag.String("memprofile", "", "write memory profile to `file`")
 
