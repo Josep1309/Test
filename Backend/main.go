@@ -2,12 +2,6 @@ package main
 
 import (
 	f "Server/functions"
-	
-    //"flag"
-	//"log"
-	//"os"
-	//"runtime"
-	//"runtime/pprof"
 
 	"encoding/json"
 	"net/http"
@@ -53,29 +47,7 @@ type SourceData struct {
         XCc                    string `json:"X-cc"`
 }
 
-//var cpuprofile = flag.String("cpuprofile", "", "write cpu profile to `file`")
-//var memprofile = flag.String("memprofile", "", "write memory profile to `file`")
-
 func main() {
-
-    /*
-    flag.Parse()
-    if *cpuprofile != "" {
-        f, err := os.Create(*cpuprofile)
-        if err != nil {
-            log.Fatal("could not create CPU profile: ", err)
-        }
-        defer f.Close() // error handling omitted for example
-        if err := pprof.StartCPUProfile(f); err != nil {
-            log.Fatal("could not start CPU profile: ", err)
-        }
-        defer pprof.StopCPUProfile()
-    }
-
-    var rootPath string = "/home/jose/Documents/Projects/Test/Database/"
-    f.EmailsAdd(rootPath)
-    f.PostZinc()
-    */
 
     r := chi.NewRouter()
 
@@ -89,8 +61,6 @@ func main() {
         AllowCredentials: false,
         MaxAge:           300, // Maximum value not ignored by any of major browsers
       }))
-
-    r.Mount("/debug", middleware.Profiler())
 
     r.Get("/", func(w http.ResponseWriter, r *http.Request) {
         w.Write([]byte("Hi! You are connected to the server."))
@@ -134,18 +104,4 @@ func main() {
     })
 
     http.ListenAndServe(":3000", r)
-
-    /*
-    if *memprofile != "" {
-        f, err := os.Create(*memprofile)
-        if err != nil {
-            log.Fatal("could not create memory profile: ", err)
-        }
-        defer f.Close() // error handling omitted for example
-        runtime.GC() // get up-to-date statistics
-        if err := pprof.WriteHeapProfile(f); err != nil {
-            log.Fatal("could not write memory profile: ", err)
-        }
-    }
-    */
 }
