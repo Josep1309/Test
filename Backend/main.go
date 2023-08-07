@@ -88,8 +88,8 @@ func main() {
         query.MaxResults, _ = strconv.Atoi(receivedJson["maxresults"])
         query.SearchType = receivedJson["searchtype"]
 
-        query.Query.StartTime = "2000-06-02T14:28:31.894Z"
-        query.Query.EndTime = "2023-12-02T15:28:31.894Z"
+        query.Query.StartTime = "2000-01-01T00:00:00.000Z"
+        query.Query.EndTime = "2030-01-01T00:00:00.000Z"
         query.From = 0
 
         jsonquery, _ := json.Marshal(query)
