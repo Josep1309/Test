@@ -76,7 +76,7 @@ func main() {
         w.Write([]byte("Loaded emails dataset!!!"))
     })
 
-    r.Post("/search/", func(w http.ResponseWriter, r *http.Request) {
+    r.Post("/search", func(w http.ResponseWriter, r *http.Request) {
 
         var query RequestBody
         var databaseResponse map[string]map[string]interface{}
@@ -106,17 +106,23 @@ func main() {
         w.Write([]byte(response))
     })
 
-    http.ListenAndServe(":3000", r)
+    r.Get("/close", func(w http.ResponseWriter, r *http.Request) {
+        if *memprofile != "" {
+            f, err := os.Create(*memprofile)
+            if err != nil {
+                log.Fatal("could not create memory profile: ", err)
+            }
+            defer f.Close() // error handling omitted for example
+            runtime.GC() // get up-to-date statistics
+            if err := pprof.WriteHeapProfile(f); err != nil {
+                log.Fatal("could not write memory profile: ", err)
+            }
+        }
+        if *cpuprofile != "" {
+            defer pprof.StopCPUProfile()
+        }
+        w.Write([]byte("Written profile files."))
+    })
 
-    if *memprofile != "" {
-        f, err := os.Create(*memprofile)
-        if err != nil {
-            log.Fatal("could not create memory profile: ", err)
-        }
-        defer f.Close() // error handling omitted for example
-        runtime.GC() // get up-to-date statistics
-        if err := pprof.WriteHeapProfile(f); err != nil {
-            log.Fatal("could not write memory profile: ", err)
-        }
-    }
+    http.ListenAndServe(":3000", r)
 }
